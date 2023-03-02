@@ -37,10 +37,8 @@ export default function Sidebar() {
       </button>
 
       <div className="hoverEffect text-gray-700 flex items-center justify-center xl:justify-start mt-auto">
-        <Image
-          height={40}
+        <img
           className="rounded-full h-10 w-10 xl:mr-2"
-          width={40}
           src="https://avatars.githubusercontent.com/u/90143986?v=4"
         />
         <div className="leading-5 hidden xl:inline">
