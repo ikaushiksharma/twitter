@@ -1,6 +1,7 @@
 import { PhotoIcon, FaceSmileIcon } from "@heroicons/react/24/outline";
 
 export default function Input() {
+
   return (
     <div className="flex border-b border-gray-200 p-3 space-x-3">
       <img
