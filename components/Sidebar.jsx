@@ -21,6 +21,7 @@ export default function Sidebar() {
         <Image
           width="50"
           height="50"
+          alt="logo"
           src="https://help.twitter.com/content/dam/help-twitter/brand/logo.png"
         ></Image>
       </div>
