@@ -1,12 +1,12 @@
 import Head from "next/head";
-import { Inter } from "next/font/google";
+import CommentModal from "../components/CommentModal";
 import Sidebar from "@/components/Sidebar";
 import Feed from "@/components/Feed";
 import Widgets from "@/components/Widgets";
 
-export default function Home({ newsResults,randomUsersResults }) {
+export default function Home({ newsResults, randomUsersResults }) {
   return (
-    <>
+    <div>
       <Head>
         <title>Twitter Clone</title>
         <meta name="description" content="Twitter Clone By Kaushik Sharma" />
@@ -22,11 +22,11 @@ export default function Home({ newsResults,randomUsersResults }) {
           newsResults={newsResults?.articles}
           randomUsersResults={randomUsersResults?.results || null}
         />
+        <CommentModal />
       </main>
-    </>
+    </div>
   );
 }
-
 
 export async function getServerSideProps(context) {
   const res = await fetch(`https://saurav.tech/NewsAPI/top-headlines/category/business/us.json`);
