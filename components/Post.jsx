@@ -7,14 +7,9 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartIconFilled } from "@heroicons/react/24/solid";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  onSnapshot,
-  setDoc,
-} from "firebase/firestore";
-import { db } from "../firebase";
+import { collection, deleteDoc, doc, onSnapshot, setDoc } from "firebase/firestore";
+import { deleteObject, ref } from "firebase/storage";
+import { db, storage } from "../firebase";
 import { signIn, useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import Moment from "react-moment";
@@ -47,7 +42,13 @@ export default function Post({ post }) {
       signIn();
     }
   }
-  const { username, name, userImg, image, text, timestamp } = post.data();
+  async function deletePost() {
+    if (window.confirm("Are you sure you want to delete this post?")) {
+      deleteDoc(doc(db, "posts", post.id));
+      if (post.data().image) deleteObject(ref(storage, `posts/${post.id}/image`));
+    }
+  }
+  const { id, username, name, userImg, image, text, timestamp } = post.data();
   return (
     <div className="flex p-3 cursor-pointer border-b border-gray-200">
       <img className="h-11 w-11 rounded-full mr-4" src={userImg} alt="user image" />
@@ -66,7 +67,12 @@ export default function Post({ post }) {
         <img className="rounded-2xl mr-2" src={image} alt="" />
         <div className="flex justify-between text-gray-500 p-2">
           <ChatBubbleOvalLeftEllipsisIcon className="h-9 w-9 hoverEffect p-2 hover:bg-sky-100 hover:text-sky-500" />
-          <TrashIcon className="h-9 w-9 hoverEffect p-2 hover:bg-red-100 hover:text-red-600" />
+          {session?.user.uid === id && (
+            <TrashIcon
+              onClick={deletePost}
+              className="h-9 w-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100"
+            />
+          )}
           <div className="flex items-center">
             {hasLiked ? (
               <HeartIconFilled

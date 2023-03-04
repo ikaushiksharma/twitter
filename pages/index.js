@@ -27,7 +27,6 @@ export default function Home({ newsResults,randomUsersResults }) {
   );
 }
 
-//https://saurav.tech/NewsAPI/top-headlines/category/business/us.json
 
 export async function getServerSideProps(context) {
   const res = await fetch(`https://saurav.tech/NewsAPI/top-headlines/category/business/us.json`);
