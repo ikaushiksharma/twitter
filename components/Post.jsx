@@ -75,8 +75,18 @@ export default function Post({ post, id }) {
           </div>
           <EllipsisHorizontalIcon className="h-10 w-10 p-2 hoverEffect hover:bg-sky-100 hover:text-sky-500" />
         </div>
-        <p className="text-gray-800 text-[15px] sm:text-[16px] mb-2">{text}</p>
-        <img className="rounded-2xl mr-2" src={image} alt="" />
+        <p
+          onClick={() => router.push(`/posts/${id}`)}
+          className="text-gray-800 text-[15px] sm:text-[16px] mb-2"
+        >
+          {text}
+        </p>
+        <img
+          onClick={() => router.push(`/posts/${id}`)}
+          className="rounded-2xl mr-2"
+          src={image}
+          alt=""
+        />
         <div className="flex justify-between text-gray-500 p-2">
           <div className="flex items-center select-none">
             <ChatBubbleOvalLeftEllipsisIcon
@@ -92,7 +102,7 @@ export default function Post({ post, id }) {
             />
             {comments.length > 0 && <span className="text-sm">{comments.length}</span>}
           </div>
-          {session?.user.uid === post?.data()?.id  && (
+          {session?.user.uid === post?.data()?.id && (
             <TrashIcon
               onClick={deletePost}
               className="h-9 w-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100"
