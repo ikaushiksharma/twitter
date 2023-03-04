@@ -27,7 +27,7 @@ export default function CommentModal() {
       comment: input,
       name: currentUser.name,
       username: currentUser.username,
-      userImg: currentUser.image,
+      userImg: currentUser.userImg,
       timestamp: serverTimestamp(),
       userId: currentUser.uid,
     });
