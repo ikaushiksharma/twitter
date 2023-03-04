@@ -1,25 +1,30 @@
 import { FaceSmileIcon, PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/firestore";
-import { useSession, signOut } from "next-auth/react";
 import { db, storage } from "../firebase";
+import { useRecoilState } from "recoil";
+import { userState } from "../atom/userAtom";
+import { signOut, getAuth } from "firebase/auth";
 import { useRef, useState } from "react";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
+
 export default function Input() {
-  const { data: session } = useSession();
   const [tweetMessage, setTweetMessage] = useState("");
+  const [currentUser, setCurrentUser] = useRecoilState(userState);
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const filePickerRef = useRef(null);
+  const auth = getAuth();
+
   const sendPost = async () => {
     if (loading) return;
     setLoading(true);
     const docRef = await addDoc(collection(db, "posts"), {
-      id: session.user.uid,
+      id: currentUser.uid,
       text: tweetMessage,
-      userImg: session.user.image,
+      userImg: currentUser.userImg,
       timestamp: serverTimestamp(),
-      name: session.user.name,
-      username: session.user.username,
+      name: currentUser.name,
+      username: currentUser.username,
     });
     const imageRef = ref(storage, `posts/${docRef.id}`);
 
@@ -46,13 +51,19 @@ export default function Input() {
       setSelectedFile(readerEvent.target.result);
     };
   };
+
+  function onSignOut() {
+    signOut(auth);
+    setCurrentUser(null);
+  }
+
   return (
     <>
-      {session && (
+      {currentUser && (
         <div className="flex  border-b border-gray-200 p-3 space-x-3">
           <img
-            onClick={signOut}
-            src={session.user.image}
+            onClick={onSignOut}
+            src={currentUser?.userImg}
             alt="user-img"
             className="h-11 w-11 rounded-full cursor-pointer hover:brightness-95"
           />
