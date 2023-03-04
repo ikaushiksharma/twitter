@@ -12,7 +12,6 @@ export default function Feed() {
     () =>
       onSnapshot(query(collection(db, "posts"), orderBy("timestamp", "desc")), (snapshot) => {
         setPosts(snapshot.docs);
-        console.log([...posts]);
       }),
     [],
   );

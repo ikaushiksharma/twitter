@@ -14,14 +14,13 @@ import { signIn, useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import Moment from "react-moment";
 import { useRecoilState } from "recoil";
-import { modalState } from "../atom/modalAtom";
-
+import { modalState, postIdState } from "../atom/modalAtom";
 export default function Post({ post }) {
   const { data: session } = useSession();
   const [likes, setLikes] = useState([]);
   const [hasLiked, setHasLiked] = useState(false);
   const [open, setOpen] = useRecoilState(modalState);
-
+  const [postId, setPostId] = useRecoilState(postIdState);
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "posts", post.id, "likes"), (snapshot) =>
       setLikes(snapshot.docs),
@@ -70,7 +69,14 @@ export default function Post({ post }) {
         <img className="rounded-2xl mr-2" src={image} alt="" />
         <div className="flex justify-between text-gray-500 p-2">
           <ChatBubbleOvalLeftEllipsisIcon
-            onClick={() => setOpen(!open)}
+            onClick={() => {
+              if (!session) {
+                signIn();
+              } else {
+                setPostId(post.id);
+                setOpen(!open);
+              }
+            }}
             className="h-9 w-9 hoverEffect p-2 hover:bg-sky-100 hover:text-sky-500"
           />
           {session?.user.uid === id && (
